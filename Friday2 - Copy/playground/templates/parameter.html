@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameter Tuning</title>
+  <style>
+    .input-numbers {
+      color: black;
+      border-radius: 10px;
+      width: 100px;
+      height: 40px;
+      padding: auto;
+      text-align: center;
+      border-width: 0;
+      font-size: large;
+    }
+
+    .outer-row {
+      width: 62vw;
+      height: 50px;
+      padding: 20px 20px;
+      border-radius: 20px;
+      border-style: solid;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 50px;
+    }
+    #download-container {
+      width: 60vw;
+      height: 275px;
+      padding: 10px 10px;
+      margin-top: 25px;
+      margin-bottom: 25px;
+
+    }
+
+    .inner-row {
+      display: flex;
+      justify-content: space-around;
+      font-size: x-large;
+    }
+
+    #full {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0px;
+    }
+    #back-btn{
+      width:100px;
+      height: 50px;
+      border-radius: 15px;
+      border-width: 0;
+      font-size: large;
+      align-self: start;
+    }
+    select {
+      width: 200px; 
+      height: 50px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    option {
+      padding: 50px !important;
+    }
+    button:hover {
+      cursor: pointer;
+    }
+    .wrapper {
+      width: 400px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 25px 40px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    header h2 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    header p {
+      margin-top: 5px;
+      font-size: 16px;
+    }
+    
+    /* .value-input-div {
+
+      display: flex;
+      margin: 30px 0 35px;
+    } */
+    
+    
+    /*
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    } */
+    
+    .value-input-div .separator {
+      width: 130px;
+      display: flex;
+      font-size: 19px;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .slider {
+      height: 5px;
+      width: 300px;
+      position: relative;
+      background: #ddd;
+      border-radius: 5px;
+    }
+    
+    .slider .progress {
+      height: 100%;
+      left: 0%; /* Updated to start from the left */
+      position: absolute;
+      border-radius: 5px;
+      background: #17A2B8;
+    }
+    
+    .range-input {
+      position: relative;
+      width: 300px;
+    }
+    
+    .range-input input {
+      position: absolute;
+      width: 310px;
+      height: 5px;
+      top: -8px;
+      left: -2px;
+      background: none;
+      pointer-events: none;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      height: 17px;
+      width: 17px;
+      border-radius: 50%;
+      background: #17A2B8;
+      pointer-events: auto;
+      -webkit-appearance: none;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+      height: 17px;
+      width: 17px;
+      border: none;
+      border-radius: 50%;
+      background: #17A2B8;
+      pointer-events: auto;
+      -moz-appearance: none;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+    
+  </style>
+</head>
+<body alink="none" vlink="none" style="background-color:#0B0F19;color:#ffffff !important;">
+  <div id="full">
+    <button id="back-btn" >Back</button>
+    <form method="post" action="/llmResponse" id="parameters-form" style="display: flex;flex-direction:column;align-items:center;">
+      {% csrf_token %}
+    <div  style="margin:30px 0px;width:40vw;min-width:400px;padding:20px;display: flex;flex-direction:column;gap:50px;border-style: solid;border-radius:10px;">
+      <div style="padding: 0px 10px;display:flex;justify-content:space-between">
+        <label for="dropdown" style="font-size: 1.3rem;">Select a Model: </label>
+        <select id="dropdown" name="model">
+            <option value="Model1" selected >Model 1</option>
+            <option value="Model2">Model 2</option>
+        </select>
+      </div>
+      <div>
+        <small>Or Click here to Download a New Model</small> 
+        <button id="show-downloadbox" style="border-radius:5px;border-width:0px;height:25px;">Get New Model</button>
+      </div>
+    </div>
+    <div id="download-container" class="outer-row" style="padding: 20px 50px !important;display:none;">
+      <p>Download model or LoRA <br><br>Enter the Hugging Face username/model path, for instance: facebook/galactica-125m. To specify a branch, add it at the end after a ":" character like this: facebook/galactica-125m:main. To download a single file, enter its name in the second box.</p>
+      <input type="text" style="border-radius: 5px;padding:10px;height:15px;">
+      <input type="text" style="border-radius: 5px; padding:10px;" placeholder="File-name for GGUF/GGUML" >
+      <button style="width:90px;height: 60px;border-radius: 4px;border-width: 0;font-size: large;color:green;align-self:center" >Download</button>
+    </div>
+
+    
+    <!-- SEED -->
+    <div id="seed" class="outer-row">
+      <div class="inner-row value-input-div">
+        <label for="seed">Seed
+        </label>
+        <div style="display: flex;flex-direction:column;margin-top:15px;">
+          <div class="slider">
+            <div class="progress"></div>
+          </div>
+          <div class="range-input">
+            <input type="range" name="seed" value="500" min="0" max="4000" step="100" class="input-range"  />
+          </div>
+        </div>
+        <input data-testid="number-input" type="number" value="500" min="0" max="4000" step="100" class="input-numbers" />
+      </div> 
+    </div>
+
+    <!-- max-new-tokens-->
+    <div id="max-new-tokens" class="outer-row">
+      <div class="inner-row value-input-div">
+        <label for="maxNewTokens" >Max New Tokens
+        </label>
+        <div style="display: flex;flex-direction:column;margin-top:15px;">
+          <div class="slider">
+            <div class="progress"></div>
+          </div>
+          <div class="range-input">
+            <input type="range"  name="maxNewTokens" value="50" min="0" max="256" step="1" class="input-range"  />
+          </div>
+        </div>
+        <input  type="number" value="50" min="0" max="256" step="1" class="input-numbers" />
+      </div> 
+    </div>
+
+    <!-- temperature-->
+    <div id="temperature" class="outer-row">
+      <div class="inner-row value-input-div">
+        <label for="temperature" >Temperature
+        </label>
+        <div style="display: flex;flex-direction:column;margin-top:15px;">
+          <div class="slider">
+            <div class="progress"></div>
+          </div>
+          <div class="range-input">
+            <input id="temp-id" type="range"  name="temperature" value="50" min="1" max="100" step="1" class="input-range"  />
+          </div>
+        </div>
+        <input  type="number" value="50" min="1" max="100" step="1" class="input-numbers" />
+      </div> 
+    </div>
+
+    <input id="parameters-submit" type="submit" value="Submit" style="width:100px;height: 50px;border-radius: 15px;margin-top:30px;border-width: 0;font-size: large;color:green;align-self:center;cursor:pointer;" >
+
+    </form>
+
+  </div>
+</body>
+
+<script>
+  const downloadBox = document.getElementById('show-downloadbox');
+  const downloadContainer= document.getElementById('download-container');
+  const backBtn = document.getElementById('back-btn');
+  const submitBtn = document.getElementById('parameters-submit');
+  const form = document.getElementById('parameters-form');
+/*
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    //window.location.href = "chatgpt.html";
+
+    var seed = document.querySelector('#seed .input-numbers').value;
+    var maxNewTokens = document.querySelector('#max-new-tokens .input-numbers').value;
+    var temperature = document.querySelector('#temperature .input-numbers').value;
+    var model = document.querySelector('#dropdown').value;
+
+    //create object
+    const parameters = {
+      seed: seed,
+      maxNewTokens: maxNewTokens,
+      temperature: temperature,
+      model: model
+    };
+    console.log(parameters);
+
+    fetch('/llmResponse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        seed: seed,
+        maxNewTokens: maxNewTokens,
+        temperature: temperature,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.href = "chatgpt.html";
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+      
+  });
+*/
+
+
+
+  backBtn.addEventListener('click', function () {
+    window.location.href = "chatgpt.html";
+  });
+
+  downloadBox.addEventListener('click', function () {
+    downloadContainer.style.display = 'flex'; 
+  });
+
+
+  const rangeInputs = document.querySelectorAll(".range-input input");
+
+  rangeInputs.forEach(rangeInput => {
+    const priceInput = rangeInput.parentElement.parentElement.parentElement.querySelector(".input-numbers");
+    const range = rangeInput.parentElement.parentElement.querySelector(".slider .progress");
+    var isTemp = false;
+    if(rangeInput.id == 'temp-id') {
+        var isTemp = true;
+    }
+
+      var maxVal = isTemp ? parseInt(priceInput.value) : parseInt(priceInput.value);
+      priceInput.value = maxVal;
+      range.style.right = -(100 - (( maxVal / rangeInput.max) * 100)) + "%";
+
+
+      rangeInput.addEventListener("input", () => {
+
+        var maxVal = parseInt(rangeInput.value);
+        priceInput.value = maxVal;
+        range.style.right =  -(100 - ((maxVal / rangeInput.max) * 100)) + "%";
+  
+      });
+
+      var maxPrice = parseInt(rangeInput.value);
+      
+      if( maxPrice <= priceInput.max) {
+        rangeInput.value = maxPrice;
+        range.style.right = -(100 - ((maxPrice / rangeInput.max) * 100)) + "%";
+      }
+  
+      priceInput.addEventListener("input", () => {
+
+        var maxPrice = parseInt(priceInput.value);
+        
+        if( maxPrice <= priceInput.max) {
+          rangeInput.value = maxPrice;
+          range.style.right = -(100 - ((maxPrice / rangeInput.max) * 100)) + "%";
+        }
+        
+      });
+
+
+
+      if(rangeInput.id == 'temp-id') {
+        var maxVal = parseInt(rangeInput.value);
+      } else {
+          var maxVal = parseInt(rangeInput.value);
+      }
+    
+      priceInput.value = maxVal;
+      range.style.right = 100 - ((maxVal / rangeInput.max) * 100) + "%";
+  
+      rangeInput.addEventListener("input", () => {
+  
+        if(rangeInput.id == 'temp-id') {
+    
+          var maxVal = parseInt(rangeInput.value);
+    
+        } else {
+    
+          var maxVal = parseInt(rangeInput.value);
+    
+        }
+      
+        priceInput.value = maxVal;
+        range.style.right = 100 - ((maxVal / rangeInput.max) * 100) + "%";
+  
+      });
+  
+      if(rangeInput.id == 'temp-id') {
+        var maxPrice = parseInt(rangeInput.value);
+      } else {
+        var maxPrice = parseInt(rangeInput.value);
+      }
+      
+  
+      if( maxPrice <= priceInput.max) {
+        rangeInput.value = maxPrice;
+        range.style.right = 100 - ((maxPrice / rangeInput.max) * 100) + "%";
+      }
+  
+      priceInput.addEventListener("input", () => {
+        if(rangeInput.id == 'temp-id') {
+          var maxPrice = parseInt(priceInput.value);
+        } else {
+          var maxPrice = parseInt(priceInput.value);
+        }
+        
+        
+        if( maxPrice <= priceInput.max) {
+          rangeInput.value = maxPrice;
+          range.style.right = 100 - ((maxPrice / rangeInput.max) * 100) + "%";
+        }
+        
+      });
+
+
+  });
+
+
+
+</script>
+</html>
