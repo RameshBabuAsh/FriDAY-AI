@@ -11,7 +11,6 @@ from read import BufReader, File
 from runtime.llcl import num_cores, Runtime
 from sys import argv
 
-# The SIMD vector width.
 from sys.info import simdwidthof
 import math
 import os
