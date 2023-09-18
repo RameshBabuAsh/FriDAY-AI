@@ -8,10 +8,18 @@ As all we know that python is slow, we need an alternative for that which should
 
 You can integrate this LLM with any of your applications which uses a language model.
 
+
 *PROCEDURES TO FOLLOW*:
+
 ---> Follow the steps & Install MOJO as per official documentation. (https://developer.modular.com/download)
+
 ---> Install python from python.org.
+
 ---> Now Fork the Github Repo. 
+
 ---> Download the bin file from this link (https://drive.google.com/file/d/1NftSxE7iu0sndEDq51BVMDvYW7Hgy2px/view?usp=sharing) or download any other model.
+
 ---> As DJango has been used, run this in the terminal (pip install django)
+
 ---> Run the LLM with the command (python3 manage.py runserver)
+
