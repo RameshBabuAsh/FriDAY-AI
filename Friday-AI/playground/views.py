@@ -44,7 +44,7 @@ def llmResponse(request):
     process = subprocess.Popen(
         [
             "mojo",
-            "llama2.mojo",
+            "llm.mojo",
             Path('stories110M.bin'),
             "-s",
             str(request.session['seed']),
