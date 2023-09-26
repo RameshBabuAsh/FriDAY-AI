@@ -1,6 +1,6 @@
 # FriDAY-AI
 
-In this project, we have developed an efficient, offline-ready, advanced LLM (Large Language Model) with low GPU/CPU usage, high accuracy, versatile conversation handling, document uploads, secure data handling, user-selectable models, and customizable response lengths. Developers can obtain the mojo file separately and integrate it into their applications, significantly boosting their chatbot's speed, up to 200 times faster.
+In this project, we have developed an efficient, offline-ready, advanced LLM (Large Language Model) with low GPU/CPU usage, high accuracy, versatile conversation handling, document uploads, secure data handling, user-selectable models, and customizable response lengths. Developers can obtain the mojo file separately and integrate it into their applications, significantly boosting their chatbot's speed, up to 2000 times faster.
 
 This project is built using MOJO, a new programming language for AI/ML and for web page view it is using python DJango for back-end.
 
