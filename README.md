@@ -21,5 +21,5 @@ You can integrate this LLM with any of your applications which uses a language m
 
 ---> As DJango has been used, run this in the terminal (pip install django)
 
----> Run the LLM with the command (python3 manage.py runserver)
+---> Run the LLM with the command (python3 manage.py runserver).  
 
