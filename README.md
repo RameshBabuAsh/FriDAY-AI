@@ -6,7 +6,7 @@ This project is built using MOJO, a new programming language for AI/ML and for w
 
 As all we know that python is slow, we need an alternative for that which should have all resources as python and faster than this. So that's how MOJO came into the picture, it has all libraries which python has and much faster than python (35000x).
 
-You can integrate this LLM with any of your applications which uses a language model.
+You can integrate this LLM with any of your applications which uses a large language model.
 
 
 *PROCEDURES TO FOLLOW*:
